@@ -12,8 +12,7 @@ import java.util.*;
 
 public class Attack {
 
-    public Attack() {
-    }
+    public Attack() {}
 
     //TODO: Account for shields gained from supports
     private Coords leastDamageSpawnLocation(GameState move, List<Coords> locations) {

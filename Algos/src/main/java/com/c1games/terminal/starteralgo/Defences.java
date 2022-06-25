@@ -12,7 +12,7 @@ import java.util.*;
 
 public class Defences {
     
-    private final int LAYOUTS = 1;
+    private final int LAYOUTS = 4;
 
     // Excess points we have for deciding if we should upgrade
     // dummy values for now
@@ -133,7 +133,7 @@ public class Defences {
         } 
 
         upgrade = 0;
-        while (state.data.p1Stats.cores > UPGRADE_SUPPORTS && upgrade < mainTurrets.size()) {
+        while (state.data.p1Stats.cores > UPGRADE_SUPPORTS && upgrade < mainSupports.size()) {
             state.attemptSpawn(mainSupports.get(upgrade), UnitType.Support);
             state.attemptSpawn(mainSupports.get(upgrade), UnitType.Upgrade);
         }
