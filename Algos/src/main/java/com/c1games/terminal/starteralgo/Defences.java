@@ -140,18 +140,18 @@ public class Defences {
 
         int upgrade = 0;    
         while (state.data.p1Stats.cores > UPGRADE_TURRETS && upgrade < mainTurrets.size()) {
-            state.attemptSpawn(mainTurrets.get(upgrade), UnitType.Upgrade);
+            state.attemptUpgrade(mainTurrets.get(upgrade));
         } 
 
         upgrade = 0;
         while (state.data.p1Stats.cores > UPGRADE_SUPPORTS && upgrade < mainSupports.size()) {
             state.attemptSpawn(mainSupports.get(upgrade), UnitType.Support);
-            state.attemptSpawn(mainSupports.get(upgrade), UnitType.Upgrade);
+            state.attemptUpgrade(mainSupports.get(upgrade));
         }
          
         upgrade = 0;
         while (state.data.p1Stats.cores > UPGRADE_LAYOUT && upgrade < current.size()) {
-            state.attemptSpawn(current.get(upgrade), UnitType.Upgrade);
+            state.attemptUpgrade(current.get(upgrade));
         } 
     }
 
