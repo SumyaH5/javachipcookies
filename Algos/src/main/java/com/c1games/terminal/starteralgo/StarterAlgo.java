@@ -8,13 +8,18 @@ import com.c1games.terminal.algo.map.MapBounds;
 import com.c1games.terminal.algo.map.Unit;
 import com.c1games.terminal.algo.units.UnitType;
 
+import com.c1games.terminal.starteralgo.*;
+
 import java.util.*;
 
 /**
  * Java implementation of the standard starter algo.
  */
 public class StarterAlgo implements GameLoop {
-    public static void main(String[] args) {
+    private Attack attack;
+    private Defences defend;
+
+    public static void main(String[] args) {        
         new GameLoopDriver(new StarterAlgo()).run();
     }
 
@@ -45,6 +50,9 @@ public class StarterAlgo implements GameLoop {
 
     @Override
     public void initialize(GameIO io, Config config) {
+        attack = new Attack();
+        defend = new Defences();
+
         GameIO.debug().println("Configuring your custom java algo strategy...");
         long seed = rand.nextLong();
         rand.setSeed(seed);
@@ -58,8 +66,13 @@ public class StarterAlgo implements GameLoop {
     public void onTurn(GameIO io, GameState move) {
         GameIO.debug().println("Performing turn " + move.data.turnInfo.turnNumber + " of your custom algo strategy");
 
-        buildDefenses(move);
-        buildReactiveDefenses(move);
+        defend.endTurn(scoredOnLocations.size());
+        scoredOnLocations.clear();
+
+        defend.startTurn(move);
+
+        // buildDefenses(move);
+        // buildReactiveDefenses(move);
 
         if (move.data.turnInfo.turnNumber < 5) {
             deployRandomInterceptors(move);
