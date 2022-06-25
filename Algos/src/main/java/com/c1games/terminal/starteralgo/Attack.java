@@ -12,8 +12,7 @@ import java.util.*;
 
 public class Attack {
 
-    public Attack(GameState state) {
-        this.state = state;
+    public Attack() {
     }
 
     //TODO: Account for shields gained from supports
