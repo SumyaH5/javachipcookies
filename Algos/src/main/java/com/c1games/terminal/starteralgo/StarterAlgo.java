@@ -8,6 +8,9 @@ import com.c1games.terminal.algo.map.MapBounds;
 import com.c1games.terminal.algo.map.Unit;
 import com.c1games.terminal.algo.units.UnitType;
 
+import com.c1games.terminal.algo.starteralgo.Defences;
+import com.c1games.terminal.algo.starteralgo.Attack;
+
 import java.util.*;
 /**
  * Java implementation of the standard starter algo.
