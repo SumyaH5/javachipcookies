@@ -34,8 +34,6 @@ public class Defences {
 
     private int currentLayout;
 
-    private int pts;
-
     private void initMain() {
         mainTurrets.add(new Coords(4, 12));
         mainTurrets.add(new Coords(23, 12));
@@ -96,20 +94,19 @@ public class Defences {
         initLayouts();
     }
 
-    public void startTurn(int points) {
-        this.pts = points;
+    public void startTurn() {
         current.clear();
 
         deployMain();
 
         int best = 0;
         for (int i = 0; i < LAYOUTS; i++) {
-            if (cost[best] > pts && cost[i] < cost[best]) {
+            if (cost[best] > state.data.p1Stats.cores && cost[i] < cost[best]) {
                 best = i;
                 continue;
             }
 
-            if (cost[i] > pts) {
+            if (cost[i] > state.data.p1Stats.cores) {
                 continue;
             }
 
@@ -122,32 +119,19 @@ public class Defences {
         deployLayout(best);
 
         int upgrade = 0;    
-        while (pts > UPGRADE_TURRETS && upgrade < mainTurrets.size()) {
-            if (state.attemptSpawn(mainTurrets[upgrade], UnitType.Upgrade)) {
-                //TODO
-                pts -= 0;
-            }
+        while (state.data.p1Stats.cores > UPGRADE_TURRETS && upgrade < mainTurrets.size()) {
+            state.attemptSpawn(mainTurrets[upgrade], UnitType.Upgrade
         } 
 
         upgrade = 0;
-        while (pts > UPGRADE_SUPPORTS && upgrade < mainTurrets.size()) {
-            if (state.attemptSpawn(mainSupports[upgrade], UnitType.Support)) {
-                //TODO
-                pts -= 0;
-            }
-
-            if (state.attemptSpawn(mainSupports[upgrade], UnitType.Upgrade)) {
-                //TODO
-                pts -= 0;
-            }
-        } 
-
+        while (state.data.p1Stats.cores > UPGRADE_SUPPORTS && upgrade < mainTurrets.size()) {
+            state.attemptSpawn(mainSupports[upgrade], UnitType.Support)
+            state.attemptSpawn(mainSupports[upgrade], UnitType.Upgrade)
+        }
+         
         upgrade = 0;
-        while (pts > UPGRADE_LAYOUT && upgrade < current.size()) {
-            if (state.attemptSpawn(current[upgrade], UnitType.Upgrade)) {
-                //TODO
-                pts -= 0;
-            }
+        while (state.data.p1Stats.cores > UPGRADE_LAYOUT && upgrade < current.size()) {
+            state.attemptSpawn(current[upgrade], UnitType.Upgrade)
         } 
     }
 
@@ -172,13 +156,8 @@ public class Defences {
         for (Coords c : spawns) {
             boolean spawned = state.attemptSpawn(c, unit);
 
-            if (spawned) {
-                //TODO
-                pts -= unit.cost1; // I don't know if this is the right variable, but I want to subtract the amt of points the unit costs
-                                   //according to config, cost1 is for SP and cost2 is MP. Still not sure if this code will work. 
-                if (curr) {
-                    current.add()
-                }
+            if (spawned && curr) {
+                current.add()
             }
         }
     }
