@@ -66,8 +66,13 @@ public class StarterAlgo implements GameLoop {
     public void onTurn(GameIO io, GameState move) {
         GameIO.debug().println("Performing turn " + move.data.turnInfo.turnNumber + " of your custom algo strategy");
 
-        buildDefenses(move);
-        buildReactiveDefenses(move);
+        defend.endTurn(scoredOnLocations.size());
+        scoredOnLocations.clear();
+
+        defend.startTurn(move);
+
+        // buildDefenses(move);
+        // buildReactiveDefenses(move);
 
         if (move.data.turnInfo.turnNumber < 5) {
             deployRandomInterceptors(move);

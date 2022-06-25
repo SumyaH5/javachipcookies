@@ -29,7 +29,6 @@ public class Defences {
     private int[] cost;
 
     private ArrayList<Coords> current;
-
     private int currentLayout;
 
     private void initMain() {
@@ -89,15 +88,27 @@ public class Defences {
         mainTurrets = new ArrayList<Coords>();
         mainSupports = new ArrayList<Coords>();
 
+        current = new ArrayList<Coords>();
+
         wallLayout = new ArrayList<ArrayList<Coords>>(LAYOUTS);
         turretLayout = new ArrayList<ArrayList<Coords>>(LAYOUTS);
 
-        int[] score = new int[LAYOUTS];
-        int[] cost = new int[LAYOUTS];
+        score = new int[LAYOUTS];
+        cost = new int[LAYOUTS];
 
-        ArrayList<Coords> current = new ArrayList<Coords>();
+        for (int i = 0; i < LAYOUTS; i++) {
+            ArrayList<Coords> walls = new ArrayList<Coords>();
+            ArrayList<Coords> turrets = new ArrayList<Coords>();
 
-        int currentLayout = 0;
+            wallLayout.add(walls);
+            turretLayout.add(turrets);
+
+            score[i] = 0;
+            cost[i] = 0;
+        }
+
+
+        currentLayout = 0;
 
         initMain();
         initLayouts();
