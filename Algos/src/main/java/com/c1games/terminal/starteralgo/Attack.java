@@ -12,8 +12,6 @@ import java.util.*;
 
 public class Attack {
 
-    private GameState state;
-
     public Attack(GameState state) {
         this.state = state;
     }

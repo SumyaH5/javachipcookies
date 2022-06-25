@@ -20,8 +20,6 @@ public class Defences {
     private final UPGRADE_TURRETS = 10;
     private final UPGRADE_LAYOUT = 20;
 
-    private GameState state;
-
     private ArrayList<Coords> mainTurrets;
     private ArrayList<Coords> mainSupports;
 
@@ -87,17 +85,15 @@ public class Defences {
         cost[3] = 12;
     }
 
-    public Defences(GameState state) {
-        this.state = state;
-
+    public Defences() {
         initMain();
         initLayouts();
     }
 
-    public void startTurn() {
+    public void startTurn(GameState state) {
         current.clear();
 
-        deployMain();
+        deployMain(state);
 
         int best = 0;
         for (int i = 0; i < LAYOUTS; i++) {
@@ -116,22 +112,22 @@ public class Defences {
         }
 
         currentLayout = best;
-        deployLayout(best);
+        deployLayout(state, best);
 
         int upgrade = 0;    
         while (state.data.p1Stats.cores > UPGRADE_TURRETS && upgrade < mainTurrets.size()) {
-            state.attemptSpawn(mainTurrets[upgrade], UnitType.Upgrade
+            state.attemptSpawn(mainTurrets[upgrade], UnitType.Upgrade);
         } 
 
         upgrade = 0;
         while (state.data.p1Stats.cores > UPGRADE_SUPPORTS && upgrade < mainTurrets.size()) {
-            state.attemptSpawn(mainSupports[upgrade], UnitType.Support)
-            state.attemptSpawn(mainSupports[upgrade], UnitType.Upgrade)
+            state.attemptSpawn(mainSupports[upgrade], UnitType.Support);
+            state.attemptSpawn(mainSupports[upgrade], UnitType.Upgrade);
         }
          
         upgrade = 0;
         while (state.data.p1Stats.cores > UPGRADE_LAYOUT && upgrade < current.size()) {
-            state.attemptSpawn(current[upgrade], UnitType.Upgrade)
+            state.attemptSpawn(current[upgrade], UnitType.Upgrade);
         } 
     }
 
@@ -139,20 +135,22 @@ public class Defences {
         score[currentLayout] -= damage;
     }
 
-    private void deployMain() {
-        spawn(mainTurrets, UnitType.Turret, false);
+    private void deployMain(GameState state) {
+        spawn(state, mainTurrets, UnitType.Turret, false);
     }
 
-    private void deployLayout(int layout) {
-        spawn(wallLayout[layout], UnitType.Wall, true);
-        spawn(turretLayout[layout], UnitType.Turret, true);
+    private void deployLayout(GameState state, int layout) {
+        spawn(state, wallLayout[layout], UnitType.Wall, true);
+        spawn(state, turretLayout[layout], UnitType.Turret, true);
+    
+        refund(state);
     }  
 
     // public int getLayouts() {
     //     return LAYOUTS;
     // }
 
-    private void spawn(ArrayList<Coords> spawns, UnitType unit, boolean curr) {
+    private void spawn(GameState state, ArrayList<Coords> spawns, UnitType unit, boolean curr) {
         for (Coords c : spawns) {
             boolean spawned = state.attemptSpawn(c, unit);
 
@@ -162,7 +160,7 @@ public class Defences {
         }
     }
 
-    private void refund() {
+    private void refund(GameState state) {
         for (Coords c : current) {
             state.attemptRemoveStructure(c);;
         }
