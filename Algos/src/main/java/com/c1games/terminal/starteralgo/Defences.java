@@ -33,8 +33,8 @@ public class Defences {
 
     private void initMain() {
         mainTurrets.add(new Coords(4, 12));
-        mainTurrets.add(new Coords(23, 12));
-        mainTurrets.add(new Coords(11, 12));
+        mainTurrets.add(new Coords(9, 12));
+        mainTurrets.add(new Coords(22, 12));
         mainTurrets.add(new Coords(16, 12));
 
         mainSupports.add(new Coords(13, 1));
@@ -44,8 +44,11 @@ public class Defences {
     private void initLayouts() {
         // STAGE 0 //
         // CENTER WALL FUNNEL //
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 12; i++) {
             wallLayout.get(0).add(new Coords(i, 13));
+            wallLayout.get(0).add(new Coords(27 - i, 13));
+        }
+        for (int i = 0; i < 10; i++) { 
             wallLayout.get(0).add(new Coords(27 - i, 13));
         }
 
@@ -54,14 +57,21 @@ public class Defences {
 
         // STAGE 1 //
         // STAGE 0 + TURRETS // 
-        for (int i = 0; i < 7; i++) {
-            wallLayout.get(1).add(new Coords(i, 13));
-            wallLayout.get(1).add(new Coords(27 - i, 13));
+        for (int i = 0; i < 12; i++) {
+            wallLayout.get(0).add(new Coords(i, 13));
+            wallLayout.get(0).add(new Coords(27 - i, 13));
         }
-
+        for (int i = 0; i < 10; i++) { 
+            wallLayout.get(0).add(new Coords(27 - i, 13));
+        }
+        
+        wallLayout.get(1).add(new Coords(12, 13));
+        wallLayout.get(1).add(new Coords(15, 13));
+        wallLayout.get(1).add(new Coords(16, 13));
+        
         turretLayout.get(1).add(new Coords(7, 13));
         turretLayout.get(1).add(new Coords(20, 13));
-
+        
         score[1] = 30;
         cost[1] = 18;
 
