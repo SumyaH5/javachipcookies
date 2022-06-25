@@ -8,8 +8,7 @@ import com.c1games.terminal.algo.map.MapBounds;
 import com.c1games.terminal.algo.map.Unit;
 import com.c1games.terminal.algo.units.UnitType;
 
-import com.c1games.terminal.algo.starteralgo.Defences;
-import com.c1games.terminal.algo.starteralgo.Attack;
+import com.c1games.terminal.starteralgo.*;
 
 import java.util.*;
 /**
@@ -21,9 +20,6 @@ public class StarterAlgo implements GameLoop {
     private Defences defend;
 
     public static void main(String[] args) {
-        attack = new Attack();
-        defend = new Defences();
-
         new GameLoopDriver(new StarterAlgo()).run();
     }
 
@@ -54,6 +50,9 @@ public class StarterAlgo implements GameLoop {
 
     @Override
     public void initialize(GameIO io, Config config) {
+        attack = new Attack();
+        defend = new Defences();
+        
         GameIO.debug().println("Configuring your custom java algo strategy...");
         long seed = rand.nextLong();
         rand.setSeed(seed);
@@ -70,8 +69,7 @@ public class StarterAlgo implements GameLoop {
         defend.endTurn(scoredOnLocations.size());
         scoredOnLocations.clear();
 
-        defend.startTurn();
-
+        defend.startTurn(move);
         // buildDefenses(move);
         // buildReactiveDefenses(move);
 

@@ -16,17 +16,17 @@ public class Defences {
 
     // Excess points we have for deciding if we should upgrade
     // dummy values for now
-    private final UPGRADE_SUPPORTS = 8;
-    private final UPGRADE_TURRETS = 10;
-    private final UPGRADE_LAYOUT = 20;
+    private final int UPGRADE_SUPPORTS = 8;
+    private final int UPGRADE_TURRETS = 10;
+    private final int UPGRADE_LAYOUT = 20;
 
     private ArrayList<Coords> mainTurrets;
     private ArrayList<Coords> mainSupports;
 
-    private ArrayList<Coords> wallLayout[LAYOUTS];
-    private ArrayList<Coords> turretLayout[LAYOUTS];
-    private int score[LAYOUTS];
-    private int cost[LAYOUTS];
+    private ArrayList<ArrayList<Coords>> wallLayout;
+    private ArrayList<ArrayList<Coords>> turretLayout;
+    private int[] score;
+    private int[] cost;
 
     private ArrayList<Coords> current;
 
@@ -38,16 +38,16 @@ public class Defences {
         mainTurrets.add(new Coords(11, 12));
         mainTurrets.add(new Coords(16, 12));
 
-        mainSupports.add(new Coords(13, 1))
-        mainSupports.add(new Coords(14, 1))
+        mainSupports.add(new Coords(13, 1));
+        mainSupports.add(new Coords(14, 1));
     }
 
     private void initLayouts() {
         // STAGE 0 //
         // CENTER WALL FUNNEL //
         for (int i = 0; i < 7; i++) {
-            wallLayout[0].add(Coords(i, 13));
-            wallLayout[0].add(Coords(27 - i, 13));
+            wallLayout.get(0).add(new Coords(i, 13));
+            wallLayout.get(0).add(new Coords(27 - i, 13));
         }
 
         score[0] = 30;
@@ -56,12 +56,12 @@ public class Defences {
         // STAGE 1 //
         // STAGE 0 + TURRETS // 
         for (int i = 0; i < 7; i++) {
-            wallLayout[1].add(Coords(i, 13));
-            wallLayout[1].add(Coords(27 - i, 13));
+            wallLayout.get(1).add(new Coords(i, 13));
+            wallLayout.get(1).add(new Coords(27 - i, 13));
         }
 
-        turretLayout[1].add(Coords(7, 13));
-        turretLayout[1].add(Coords(20, 13))
+        turretLayout.get(1).add(new Coords(7, 13));
+        turretLayout.get(1).add(new Coords(20, 13));
 
         score[1] = 30;
         cost[1] = 18;
@@ -69,7 +69,7 @@ public class Defences {
         // STAGE 2 //
         // LEFT WALLS // 
         for (int i = 0; i < 12; i++) {
-            wallLayout[2].add(Coords(i, 13));
+            wallLayout.get(2).add(new Coords(i, 13));
         }
 
         score[2] = 30;
@@ -78,7 +78,7 @@ public class Defences {
         // STAGE 3 //
         // RIGHT WALLS // 
         for (int i = 0; i < 12; i++) {
-            wallLayout[3].add(Coords(27 - i, 13));
+            wallLayout.get(3).add(new Coords(27 - i, 13));
         }
 
         score[3] = 30;
@@ -86,6 +86,19 @@ public class Defences {
     }
 
     public Defences() {
+        mainTurrets = new ArrayList<Coords>();
+        mainSupports = new ArrayList<Coords>();
+
+        wallLayout = new ArrayList<ArrayList<Coords>>(LAYOUTS);
+        turretLayout = new ArrayList<ArrayList<Coords>>(LAYOUTS);
+
+        int[] score = new int[LAYOUTS];
+        int[] cost = new int[LAYOUTS];
+
+        ArrayList<Coords> current = new ArrayList<Coords>();
+
+        int currentLayout = 0;
+
         initMain();
         initLayouts();
     }
@@ -116,22 +129,22 @@ public class Defences {
 
         int upgrade = 0;    
         while (state.data.p1Stats.cores > UPGRADE_TURRETS && upgrade < mainTurrets.size()) {
-            state.attemptSpawn(mainTurrets[upgrade], UnitType.Upgrade);
+            state.attemptSpawn(mainTurrets.get(upgrade), UnitType.Upgrade);
         } 
 
         upgrade = 0;
         while (state.data.p1Stats.cores > UPGRADE_SUPPORTS && upgrade < mainTurrets.size()) {
-            state.attemptSpawn(mainSupports[upgrade], UnitType.Support);
-            state.attemptSpawn(mainSupports[upgrade], UnitType.Upgrade);
+            state.attemptSpawn(mainSupports.get(upgrade), UnitType.Support);
+            state.attemptSpawn(mainSupports.get(upgrade), UnitType.Upgrade);
         }
          
         upgrade = 0;
         while (state.data.p1Stats.cores > UPGRADE_LAYOUT && upgrade < current.size()) {
-            state.attemptSpawn(current[upgrade], UnitType.Upgrade);
+            state.attemptSpawn(current.get(upgrade), UnitType.Upgrade);
         } 
     }
 
-    public endTurn(int damage) {
+    public void endTurn(int damage) {
         score[currentLayout] -= damage;
     }
 
@@ -140,8 +153,8 @@ public class Defences {
     }
 
     private void deployLayout(GameState state, int layout) {
-        spawn(state, wallLayout[layout], UnitType.Wall, true);
-        spawn(state, turretLayout[layout], UnitType.Turret, true);
+        spawn(state, wallLayout.get(layout), UnitType.Wall, true);
+        spawn(state, turretLayout.get(layout), UnitType.Turret, true);
     
         refund(state);
     }  
@@ -155,7 +168,7 @@ public class Defences {
             boolean spawned = state.attemptSpawn(c, unit);
 
             if (spawned && curr) {
-                current.add()
+                current.add(c);
             }
         }
     }
